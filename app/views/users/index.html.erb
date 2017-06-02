@@ -1,0 +1,17 @@
+<h1>You must be an owner if you are here, congratulations!!</h1>
+
+<% @users.each do |user| %>
+  <div style="border: 1px solid black; margin: 12px;">
+    <h2><%= user.username %></h2>
+    <p>role: <%= user.role %></p>
+    <% if user.role_before_type_cast < 2 %>
+      <%= button_to "Upgrade To Admin", { controller: 'users', id: user.id, role: 2, action: "change_account_role" }, method: :put %>
+    <% end %>
+    <% if user.role_before_type_cast < 3 %>
+      <%= button_to "Upgrade To Super User", { controller: 'users', id: user.id, role: 3, action: "change_account_role" }, method: :put %>
+    <% end %>
+    <% if user.role_before_type_cast > 2 %>
+      <%= button_to "Downgrade to Admin", { controller: 'users', id: user.id, role: 2, action: "change_account_role" }, method: :put %>
+    <% end %>
+  </div> 
+<% end %>

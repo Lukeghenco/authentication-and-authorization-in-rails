@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>AuthenticationApplication</title>
+    <%= csrf_meta_tags %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+      <!-- 
+        if a user is logged in they can go do awesome things 
+        else the can go to a login or signup screen 
+      -->
+    <div class="navbar">
+      <% if logged_in? %>
+        <%= link_to "Awesome Things", awesome_things_path %>
+        <% if current_user.role_before_type_cast >= 3 %>
+          <%= link_to "Do Super User Things", do_super_user_things_path %>
+        <% end %>
+        <% if current_user.role == "owner" %>
+          <%= link_to "Do Owner Things", do_owner_things_path %>
+          <%= link_to "User Accounts", users_path %>
+        <% end %>
+        <%= button_to "Logout", { controller: 'sessions', action: "destroy" }, method: :delete %>
+      <% else %>
+        <%= link_to "Login", new_session_path %>
+        <%= link_to "Signup", new_registration_path %>
+      <% end %>
+    </div>
+    
+    <% flash.each do |name, msg| %>
+      <% if msg.is_a?(String) %>
+        <%= content_tag :div, msg, :class => "flash_#{name}" %>
+      <% end %>
+    <% end %>
+
+    <div class="main-content">
+      <%= yield %>
+    </div>
+
+  </body>
+</html>
